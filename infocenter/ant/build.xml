@@ -1,0 +1,158 @@
+<project name="infocenter" default="deploy">
+
+	<import file="ant_ganesan.xml" />
+
+	<property name="build.home" value="${dir.home}/build" />
+
+	<path id="compile.classpath">
+		<fileset dir="${dir.home}/WebContent/WEB-INF/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+
+	<target name="clean">
+		<delete dir="${build.home}/infocenter"/>		
+		<delete dir="${build.home}/InternationalMedicalPassport" />
+		<delete dir="${build.home}/InternalDocumentation" />
+		<delete dir="${build.home}/EasySmartcare" />
+		<delete dir="${build.home}/integration" />
+	</target>
+
+	<target name="make_dir" depends="clean">
+		<mkdir dir="${build.home}/infocenter"/>		
+		<mkdir dir="${build.home}/InternationalMedicalPassport" />
+		<mkdir dir="${build.home}/InternalDocumentation" />		
+		<mkdir dir="${build.home}/EasySmartcare" />
+		<mkdir dir="${build.home}/integration" />
+		
+		<mkdir dir="${build.home}/InternationalMedicalPassport/WEB-INF/classes" />
+		<mkdir dir="${build.home}/EasySmartcare/WEB-INF/classes" />
+		<mkdir dir="${build.home}/integration/WEB-INF/classes" />
+		<mkdir dir="${build.home}/InternalDocumentation/WEB-INF/classes" />
+	</target>
+
+
+
+	<target name="copy_files" depends="make_dir">
+		
+		<copy todir="${build.home}/InternationalMedicalPassport">
+			<fileset dir="${dir.home}/WebContent">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.home}/InternalDocumentation">
+			<fileset dir="${dir.home}/WebContent">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.home}/EasySmartcare">
+			<fileset dir="${dir.home}/WebContent">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<copy todir="${build.home}/integration">
+			<fileset dir="${dir.home}/WebContent">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="compile" depends="copy_files">
+		<javac destdir="${build.home}/InternationalMedicalPassport/WEB-INF/classes" srcdir="${dir.home}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac destdir="${build.home}/EasySmartcare/WEB-INF/classes" srcdir="${dir.home}">
+			<classpath refid="compile.classpath" />
+		</javac>
+
+		<javac destdir="${build.home}/integration/WEB-INF/classes" srcdir="${dir.home}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac destdir="${build.home}/InternalDocumentation/WEB-INF/classes" srcdir="${dir.home}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		
+	</target>
+
+
+	<target name="copy_jar" depends="compile">
+		
+		<copy todir="${build.home}/InternationalMedicalPassport/WEB-INF/plugins">
+			<fileset dir="${dir.home}/InternationalMedicalPassport">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.home}/InternalDocumentation/WEB-INF/plugins">
+			<fileset dir="${dir.home}/InternalDocumentation">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.home}/EasySmartcare/WEB-INF/plugins">
+			<fileset dir="${dir.home}/EasySmartcare">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.home}/integration/WEB-INF/plugins">
+			<fileset dir="${dir.home}/integration">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+	</target>
+
+
+
+	<target name="war" depends="copy_jar">
+		
+		<delete dir="${dir.home}/wars/InternationalMedicalPassport.war" />
+		<delete dir="${dir.home}/wars/InternalDocumentation.war" />
+		<delete dir="${dir.home}/wars/EasySmartCare.war" />
+		<delete dir="${dir.home}/wars/integration.war" />
+
+	
+		<war jarfile="${dir.home}/wars/InternationalMedicalPassport.war">
+			<metainf dir="${build.home}/InternationalMedicalPassport/META-INF/" />
+			<fileset dir="${build.home}/InternationalMedicalPassport">
+				<include name="**/*" />
+			</fileset>
+		</war>
+		<war jarfile="${dir.home}/wars/InternalDocumentation.war">
+			<metainf dir="${build.home}/InternalDocumentation/META-INF/" />
+			<fileset dir="${build.home}/InternalDocumentation">
+				<include name="**/*" />
+			</fileset>
+		</war>
+
+	
+		<war jarfile="${dir.home}/wars/EasySmartCare.war">
+			<metainf dir="${build.home}/EasySmartcare/META-INF/" />
+			<fileset dir="${build.home}/EasySmartcare">
+				<include name="**/*" />
+			</fileset>
+		</war>
+
+		<war jarfile="${dir.home}/wars/Integration.war">
+			<metainf dir="${build.home}/integration/META-INF/" />
+			<fileset dir="${build.home}/integration">
+				<include name="**/*" />
+			</fileset>
+		</war>
+
+	</target>
+
+	<target name="deploy" depends="war">
+		<copy todir="${server.apps}/">
+			<fileset dir="${dir.home}/wars">
+				<include name="InternationalMedicalPassport.war"/>
+				<include name="InternalDocumentation.war"/>
+				<include name="EasySmartCare.war"/>
+				<include name="Integration.war"/>
+
+			</fileset>
+		</copy>
+	</target>
+</project>

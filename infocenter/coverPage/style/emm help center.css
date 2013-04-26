@@ -1,0 +1,6 @@
+@charset "utf-8";
+/* CSS Document */
+.header{width:960px;height:98px;background:url(../images/help-center-emm_02.gif)no-repeat;margin:0 auto;}
+.width{width:960px;margin:0 auto;}
+h1{font:bold 20px Arial, Helvetica, sans-serif;padding:10px 0 10px 0;margin:0;}
+p{font:normal 12px Arial, Helvetica, sans-serif;padding:0 0 10px 0;margin:0;}
